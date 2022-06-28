@@ -1,6 +1,7 @@
 package org.tomspencer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,17 @@ public class GameTest {
     assertThat(game.state())
         .isEqualTo(new GameState(Status.IN_PROGRESS));
     assertThat(game.playedBy(Player.X))
-        .containsExactly(Square.TOP_RIGHT, Square.CENTER_RIGHT);
+        .containsExactlyInAnyOrder(Square.TOP_RIGHT, Square.CENTER_RIGHT);
+  }
+
+  @Test
+  void givenComputerMove_PlayerNotAllowedSameSquare() {
+    ComputerStub computer = new ComputerStub();
+    computer.setNextSquare(Square.TOP_LEFT);
+    Game game = new Game(computer);
+    game.play(Square.TOP_RIGHT);
+
+    assertThatThrownBy(() -> game.play(Square.TOP_LEFT))
+        .isInstanceOf(SquareAlreadyTakenException.class);
   }
 }

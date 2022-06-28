@@ -24,6 +24,10 @@ public class Game {
   }
 
   public void play(Square square) {
+    if (board.alreadyTaken(square)) {
+      throw new SquareAlreadyTakenException();
+    }
+
     board = computer.selectSquareFrom(board.take(square, Player.X));
   }
 
