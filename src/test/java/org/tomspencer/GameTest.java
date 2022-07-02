@@ -2,6 +2,7 @@ package org.tomspencer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.tomspencer.Status.DRAW;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -55,5 +56,31 @@ public class GameTest {
 
     assertThatThrownBy(() -> game.play(Square.TOP_LEFT))
         .isInstanceOf(SquareAlreadyTakenException.class);
+  }
+
+  @Test
+  void giveDrawReturnDraw() {
+    ComputerStub computer = new ComputerStub();
+    Game game = new Game(computer);
+    computer.setNextSquare(Square.TOP_MIDDLE);
+    game.play(Square.TOP_LEFT);
+    computer.setNextSquare(Square.CENTER_LEFT);
+    game.play(Square.TOP_RIGHT);
+    computer.setNextSquare(Square.BOTTOM_LEFT);
+    game.play(Square.CENTER_MIDDLE);
+    computer.setNextSquare(Square.BOTTOM_RIGHT);
+    game.play(Square.CENTER_RIGHT);
+    game.play(Square.BOTTOM_MIDDLE);
+
+    assertThat(game.state())
+        .isEqualTo(new GameState(Status.DRAW));
+    assertThat(game.playedBy(Player.X))
+        .containsExactlyInAnyOrder(
+            Square.TOP_LEFT,
+            Square.TOP_RIGHT,
+            Square.CENTER_MIDDLE,
+            Square.CENTER_RIGHT,
+            Square.BOTTOM_MIDDLE
+        );
   }
 }

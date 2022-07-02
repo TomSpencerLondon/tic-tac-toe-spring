@@ -29,6 +29,10 @@ public class Game {
     }
 
     board = computer.selectSquareFrom(board.take(square, Player.X));
+
+    if (board.isFull()) {
+      gameState = new GameState(Status.DRAW);
+    }
   }
 
   public List<Square> playedBy(Player player) {

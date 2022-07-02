@@ -2,10 +2,10 @@ package org.tomspencer;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class Board {
+
+  private static final int FULL_BOARD = 9;
   private final Map<Square, Player> takenSquares;
 
   public Board() {
@@ -28,5 +28,9 @@ public class Board {
 
   public boolean alreadyTaken(Square square) {
     return takenSquares.containsKey(square);
+  }
+
+  public boolean isFull() {
+    return this.takenSquares.entrySet().size() == FULL_BOARD;
   }
 }
